@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-output-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-output
+  template:
+    metadata:
+      labels:
+        app: log-output
+    spec:
+      volumes:
+        - name: shared-timestamp
+          emptyDir: {}
+        - name: shared-ping-pong
+          persistentVolumeClaim:
+            claimName: ping-pong-claim
+      containers:
+        - name: timestamp-generator
+          image: timestamp-generator-app:1.3
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: shared-timestamp
+            mountPath: /usr/src/app/files
+        - name: timestamp-output
+          image: timestamp-output-app:1.4
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: shared-timestamp
+            mountPath: /usr/src/app/files/timestamps
+          - name: shared-ping-pong
+            mountPath: /usr/src/app/files/pingpongs
