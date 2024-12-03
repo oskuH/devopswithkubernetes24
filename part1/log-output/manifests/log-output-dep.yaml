@@ -20,13 +20,13 @@ spec:
             claimName: ping-pong-claim
       containers:
         - name: timestamp-generator
-          image: timestamp-generator-app:1.3
+          image: oskuh/timestamp-generator-app:1.1
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: shared-timestamp
             mountPath: /usr/src/app/files
         - name: timestamp-output
-          image: timestamp-output-app:1.4
+          image: oskuh/timestamp-output-app:1.1
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: shared-timestamp

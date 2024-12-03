@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: project1-dep
+  name: project-dep
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: project1
+      app: project
   template:
     metadata:
       labels:
-        app: project1
+        app: project
     spec:
       volumes:
         - name: shared-image
@@ -18,13 +18,13 @@ spec:
             claimName: image-claim
       containers:
         - name: image-finder
-          image: image-finder-app:2.0
+          image: oskuh/image-finder-app:1.1
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: shared-image
             mountPath: /usr/src/app/image
-        - name: p1-output
-          image: p1-output-app:1.7
+        - name: project-output
+          image: oskuh/project-output-app:1.1
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: shared-image
