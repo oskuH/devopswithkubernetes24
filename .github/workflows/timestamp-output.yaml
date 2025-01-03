@@ -64,6 +64,9 @@ jobs:
           echo "${{ secrets.SOPS_AGE_KEY_FILE }}" > ~/.config/sops/age/keys.txt
           export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
           sops --decrypt part3/log-output/manifests/secret.enc.yaml > part3/log-output/manifests/secret.yaml
+      
+      - name: Create namespace
+        run: kubectl create namespace exercises || true
 
       - name: Deploy
         run: |-
