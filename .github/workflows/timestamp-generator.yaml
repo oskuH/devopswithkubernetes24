@@ -67,7 +67,9 @@ jobs:
           sops --decrypt part3/log-output/manifests/secret.enc.yaml > part3/log-output/manifests/secret.yaml
 
       - name: Create namespace
-        run: kubectl create namespace exercises || true
+        run: |
+          kubectl create namespace exercises || true
+          kubectl config set-context --current --namespace=exercises
 
       - name: Deploy
         run: |-
