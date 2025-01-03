@@ -1,17 +1,17 @@
-name: Release application
+name: Release ping-pong
 
 on:
   push:
     paths:
-      - 'timestamp-generator/**'
-      - '.github/workflows/timestamp-generator.yaml'
+      - 'part3/log-output/ping-pong/**'
+      - '.github/workflows/ping-pong.yaml'
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: dwk-cluster
   GKE_ZONE: europe-north1-b
-  IMAGE: timestamp-generator
-  SERVICE: log-output-dep
+  IMAGE: ping-pong
+  SERVICE: ping-pong-dep
   BRANCH: ${{ github.ref_name }}
   SOPS_AGE_KEY_FILE: ${{ secrets.SOPS_AGE_KEY_FILE }}
 
@@ -56,11 +56,12 @@ jobs:
         run: |
           mkdir -p ~/.config/sops/age
           echo "$SOPS_AGE_KEY_FILE" > ~/.config/sops/age/keys.txt
-          sops --decrypt manifests/secret.enc.yaml > manifests/secret.yaml
+          sops --decrypt part3/log-output/manifests/secret.enc.yaml > part3/log-output/manifests/secret.yaml
 
       - name: Deploy
         run: |-
-          kustomize edit set image TIMESTAMPGENERATOR/$IMAGE=gcr.io/$PROJECT_ID/$IMAGE:$BRANCH-$GITHUB_SHA
+          cd part3/log-output/
+          kustomize edit set image PINGPONG/$IMAGE=gcr.io/$PROJECT_ID/$IMAGE:$BRANCH-$GITHUB_SHA
           kustomize build . | kubectl apply -f -
           kubectl rollout status deployment $SERVICE
           kubectl get services -o wide
