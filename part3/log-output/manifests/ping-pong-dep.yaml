@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: exercises
+  name: ping-pong-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ping-pong
+  template:
+    metadata:
+      labels:
+        app: ping-pong
+    spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: postgres:latest
+          command: ['sh', '-c', 'until pg_isready -h postgres-svc.exercises.svc.cluster.local -p 5432; do echo waiting for postgres; sleep 2; done;']
+      containers:
+        - name: ping-pong
+          image: PINGPONG/IMAGE
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-password
+                  key: POSTGRES_PASSWORD
