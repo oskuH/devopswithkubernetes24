@@ -45,7 +45,7 @@ jobs:
           location: '${{ env.GKE_ZONE }}'
       
       - name: Build
-        run: docker build --tag "gcr.io/$PROJECT_ID/$IMAGE:$BRANCH-$GITHUB_SHA" ./$IMAGE
+        run: docker build --tag "gcr.io/$PROJECT_ID/$IMAGE:$BRANCH-$GITHUB_SHA" ./part3/log-output/$IMAGE
 
       - name: Publish
         run: docker push "gcr.io/$PROJECT_ID/$IMAGE:$BRANCH-$GITHUB_SHA"
