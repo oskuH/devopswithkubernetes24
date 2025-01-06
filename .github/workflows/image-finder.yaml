@@ -1,4 +1,4 @@
-name: Release project/image-finder.
+name: Release project/image-finder
 
 on:
   push:

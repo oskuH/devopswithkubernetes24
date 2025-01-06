@@ -16,7 +16,7 @@ spec:
       initContainers:
         - name: wait-for-postgres
           image: postgres:latest
-          command: ['sh', '-c', 'until pg_isready -h postgres-svc.exercises.svc.cluster.local -p 5432; do echo waiting for postgres; sleep 2; done;']
+          command: ['sh', '-c', 'until pg_isready -h postgres-svc.default.svc.cluster.local -p 5432; do echo waiting for postgres; sleep 2; done;']
       containers:
         - name: todo-backend
           image: TODOBACKEND/IMAGE
