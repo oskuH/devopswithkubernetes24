@@ -4,7 +4,7 @@ metadata:
   namespace: default
   name: image-claim
 spec:
-  storageClassName: p-pv
+  storageClassName: standard-rwo
   accessModes:
     - ReadWriteOnce
   resources:

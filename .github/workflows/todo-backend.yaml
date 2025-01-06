@@ -1,4 +1,4 @@
-name: Release project/todo-backend
+name: Release project/todo-backend.
 
 on:
   push:

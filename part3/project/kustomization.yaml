@@ -9,7 +9,6 @@ resources:
   - manifests/todo-backend-svc.yaml
   - manifests/ingress.yaml
   - manifests/cronjob.yaml
-  - persistentvolumes/persistentvolume.yaml
   - persistentvolumes/persistentvolumeclaim.yaml
   
 images:
