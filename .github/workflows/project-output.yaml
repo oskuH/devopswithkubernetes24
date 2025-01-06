@@ -1,4 +1,4 @@
-name: Release project/project-output
+name: Release project/project-output.
 
 on:
   push:
