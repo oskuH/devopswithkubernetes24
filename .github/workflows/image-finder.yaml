@@ -1,4 +1,4 @@
-name: Release image-finder
+name: Release project/image-finder
 
 on:
   push:
@@ -67,7 +67,7 @@ jobs:
 
       - name: Deploy
         run: |-
-          cd part3/log-output/
+          cd part3/project/
           kustomize edit set image IMAGEFINDER/IMAGE=gcr.io/$PROJECT_ID/$IMAGE:$BRANCH-$GITHUB_SHA
           kustomize build . | kubectl apply -f -
           kubectl rollout status deployment $SERVICE
