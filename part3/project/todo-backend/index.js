@@ -53,6 +53,10 @@ const insertTodo = async (newTodo) => {
   await client.query('INSERT INTO todos (todo) VALUES ($1)', [newTodo]);
 };
 
+app.get('/', (req, res) => {
+  res.status(200).send('OK');
+});
+
 app.get('/todos', async (req, res) => {
   try {
     const todos = await getTodos();

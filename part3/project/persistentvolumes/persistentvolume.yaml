@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  namespace: project
-  name: project1-pv
+  namespace: default
+  name: project-pv
 spec:
-  storageClassName: p1-pv
+  storageClassName: p-pv
   capacity:
-    storage: 1Gi
+    storage: 200Mi
   volumeMode: Filesystem
   accessModes:
   - ReadWriteOnce

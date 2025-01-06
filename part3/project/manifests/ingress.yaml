@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  namespace: project
+  namespace: default
   name: project-ingress
 spec:
   rules:
@@ -13,11 +13,11 @@ spec:
           service:
             name: frontend-svc
             port:
-              number: 2345
+              number: 80
       - path: /todos
         pathType: Prefix
         backend:
           service:
             name: todo-backend-svc
             port:
-              number: 2345
+              number: 80

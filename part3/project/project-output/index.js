@@ -44,7 +44,6 @@ app.get('/api', async (req, res) => {
     console.log(error);
     res.status(503).send('Image not available yet. Please try again later.');
   }
-
 });
 
 const appName = path.basename(path.dirname(__filename));

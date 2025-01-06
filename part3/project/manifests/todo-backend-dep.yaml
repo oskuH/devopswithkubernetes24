@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: project
+  namespace: default
   name: todo-backend-dep
 spec:
   replicas: 1
@@ -13,10 +13,13 @@ spec:
       labels:
         app: todo-backend
     spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: postgres:latest
+          command: ['sh', '-c', 'until pg_isready -h postgres-svc.exercises.svc.cluster.local -p 5432; do echo waiting for postgres; sleep 2; done;']
       containers:
         - name: todo-backend
-          image: todo-backend-app:1.5
-          imagePullPolicy: IfNotPresent
+          image: TODOBACKEND/IMAGE
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:

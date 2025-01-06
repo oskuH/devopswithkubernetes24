@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: project
+  namespace: default
   name: frontend-dep
 spec:
   replicas: 1
@@ -19,14 +19,17 @@ spec:
             claimName: image-claim
       containers:
         - name: image-finder
-          image: image-finder-app:2.0
-          imagePullPolicy: IfNotPresent
+          image: IMAGEFINDER/IMAGE
           volumeMounts:
           - name: shared-image
             mountPath: /usr/src/app/image
         - name: project-output
-          image: project-output-app:1.8
-          imagePullPolicy: IfNotPresent
+          image: PROJECTOUTPUT/IMAGE
           volumeMounts:
           - name: shared-image
             mountPath: /usr/src/app/image
+    strategy: 
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 0
+        maxUnavailable: 1

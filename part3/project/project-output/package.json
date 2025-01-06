@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "test": "cross-env NODE_ENV=test nodemon index.js",
-    "build:ui": "rm -rf dist && cd ../frontend/ && npm run build && cp -r dist ../p1-output"
+    "build:ui": "rm -rf dist && cd ../frontend/ && npm run build && cp -r dist ../project-output"
   },
   "author": "",
   "license": "ISC",
