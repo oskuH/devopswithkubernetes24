@@ -28,8 +28,8 @@ spec:
           volumeMounts:
           - name: shared-image
             mountPath: /usr/src/app/image
-      strategy: 
-        type: RollingUpdate
-        rollingUpdate:
-          maxSurge: 0
-          maxUnavailable: 1
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
