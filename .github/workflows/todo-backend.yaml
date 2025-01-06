@@ -18,7 +18,7 @@ jobs:
   build-publish-deploy:
     name: Build, Publish and Deploy
     runs-on: ubuntu-latest
-    environment: project
+    environment: my-environment
 
     steps:
       - name: Checkout
