@@ -16,10 +16,10 @@ jobs:
       
       - name: Set namespace variable
         run: |
-          if [ "${GITHUB_REF#refs/heads/}" = "main" ]; then
+          if [ "${{ github.event.ref }}" = "main" ]; then
             NAMESPACE="default"
           else
-            NAMESPACE="${GITHUB_REF#refs/heads/}"
+            NAMESPACE="${{ github.event.ref }}"
           fi
           echo "NAMESPACE=$NAMESPACE" >> $GITHUB_ENV
         
