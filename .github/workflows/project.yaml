@@ -7,6 +7,8 @@ on:
       - 'part3/project/project-output/**'
       - 'part3/project/todo-backend/**'
       - 'part3/project/image-finder/**'
+      - 'part3/project/manifests/**'
+      - 'part3/project/persistentvolumes/**'
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
