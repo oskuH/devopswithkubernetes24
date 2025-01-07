@@ -1,0 +1,29 @@
+name: Delete namespace
+
+on:
+  delete:
+    branches:
+      - '*'
+
+jobs:
+  delete-namespace:
+    name: Delete namespace
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set namespace variable
+        run: |
+          if [ "${GITHUB_REF#refs/heads/}" = "main" ]; then
+            NAMESPACE="default"
+          else
+            NAMESPACE="${GITHUB_REF#refs/heads/}"
+          fi
+          echo "NAMESPACE=$NAMESPACE" >> $GITHUB_ENV
+        
+      - name: Delete namespace
+        run: kubectl delete namespace $NAMESPACE
+        env:
+          NAMESPACE: ${{ env.NAMESPACE }}
