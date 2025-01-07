@@ -11,7 +11,7 @@ const { Client } = require('pg');
 const client = new Client({
   user: 'postgres',
   password: POSTGRES_PASSWORD,
-  host: 'postgres-svc.project.svc.cluster.local',
+  host: 'postgres-svc.$NAMESPACE.svc.cluster.local',
   port: 5432,
   database: 'postgres'
 });

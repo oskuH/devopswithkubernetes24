@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: default
   name: todo-backend-dep
 spec:
   replicas: 1
@@ -26,3 +25,5 @@ spec:
                 secretKeyRef:
                   name: postgres-password
                   key: POSTGRES_PASSWORD
+            - name: NAMESPACE
+              value: $(NAMESPACE)
