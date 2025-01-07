@@ -84,9 +84,14 @@ jobs:
       - name: Deploy
         run: |-
           cd part3/project/
-          kubectl create namespace ${GITHUB_REF#refs/heads/} || true
-          kubectl config set-context --current --namespace=${GITHUB_REF#refs/heads/}
-          kustomize edit set namespace ${GITHUB_REF#refs/heads/}
+          if [ "${GITHUB_REF#refs/heads/}" = "main" ]; then
+            NAMESPACE="default"
+          else
+            NAMESPACE="${GITHUB_REF#refs/heads/}"
+          fi
+          kubectl create namespace $NAMESPACE || true
+          kubectl config set-context --current --namespace=$NAMESPACE
+          kustomize edit set namespace $NAMESPACE
           kustomize edit set image IMAGEFINDER/IMAGE=gcr.io/$PROJECT_ID/$IMAGE1:$BRANCH-$GITHUB_SHA
           kustomize edit set image PROJECTOUTPUT/IMAGE=gcr.io/$PROJECT_ID/$IMAGE2:$BRANCH-$GITHUB_SHA
           kustomize edit set image TODOBACKEND/IMAGE=gcr.io/$PROJECT_ID/$IMAGE3:$BRANCH-$GITHUB_SHA
