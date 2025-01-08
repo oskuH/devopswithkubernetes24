@@ -21,7 +21,6 @@ function App() {
     todoService
       .getAll()
       .then(returnedTodos => {
-        console.log('RETURNED TODOS:', returnedTodos)
         setTodos(returnedTodos)
       })
   }, [])

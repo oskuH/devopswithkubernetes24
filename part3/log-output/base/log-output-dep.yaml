@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: exercises
   name: log-output-dep
 spec:
   replicas: 1
@@ -25,13 +24,11 @@ spec:
       containers:
         - name: timestamp-generator
           image: TIMESTAMPGENERATOR/IMAGE
-          imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: shared-timestamp
             mountPath: /usr/src/app/timestamp
         - name: timestamp-output
           image: TIMESTAMPOUTPUT/IMAGE
-          imagePullPolicy: IfNotPresent
           env:
           - name: MESSAGE
             valueFrom:

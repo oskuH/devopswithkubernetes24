@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+patches:
+  - path: log-output-svc-patch.yaml
+  - path: ping-pong-svc-patch.yaml
+configMapGenerator:
+  - name: namespace-config
+    literals:
+      - NAMESPACE=local-log-output
+namespace: local-log-output

@@ -2,15 +2,17 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD
+const NAMESPACE = process.env.NAMESPACE;
 
 if (!POSTGRES_PASSWORD) throw new Error('No value for POSTGRES_PASSWORD environment variable')
+if (!NAMESPACE) throw new Error('No value for NAMESPACE environment variable');
 
 const { Client } = require('pg')
 
 const client = new Client({
     user: 'postgres',
     password: POSTGRES_PASSWORD,
-    host: 'postgres-svc.exercises.svc.cluster.local',
+    host: `postgres-svc.${NAMESPACE}.svc.cluster.local`,
     port: 5432,
     database: 'postgres'
 })
