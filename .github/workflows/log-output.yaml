@@ -1,0 +1,99 @@
+name: Release log-output
+
+on:
+  push:
+    paths:
+      - '.github/workflows/log-output.yaml'
+      - 'part3/log-output/ping-pong/**'
+      - 'part3/log-output/timestamp-generator/**'
+      - 'part3/log-output/timestamp-output/**'
+      - 'part3/log-output/base/**'
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: dwk-cluster
+  GKE_ZONE: europe-north1-b
+  IMAGE1: ping-pong
+  IMAGE2: timestamp-generator
+  IMAGE3: timestamp-output
+  SERVICE1: ping-pong-dep
+  SERVICE2: log-output-dep
+  BRANCH: ${{ github.ref_name }}
+  SOPS_AGE_KEY_FILE: ${{ secrets.SOPS_AGE_KEY_FILE }}
+
+jobs:
+  build-publish-deploy:
+    name: Build, Publish and Deploy
+    runs-on: ubuntu-latest
+    environment: my-environment
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GKE_SA_KEY }}'
+        
+      - name: 'Set up Cloud SDK'
+        uses: google-github-actions/setup-gcloud@v2
+      
+      - name: 'Use gcloud CLI'
+        run: gcloud info
+
+      - run: gcloud --quiet auth configure-docker
+
+      - name: 'Get GKE credentials'
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: '${{ env.GKE_CLUSTER }}'
+          project_id: '${{ env.PROJECT_ID }}'
+          location: '${{ env.GKE_ZONE }}'
+      
+      - name: Build images
+        run: | 
+          docker build --tag "gcr.io/$PROJECT_ID/$IMAGE1:$BRANCH-$GITHUB_SHA" ./part3/log-output/$IMAGE1
+          docker build --tag "gcr.io/$PROJECT_ID/$IMAGE2:$BRANCH-$GITHUB_SHA" ./part3/log-output/$IMAGE2
+          docker build --tag "gcr.io/$PROJECT_ID/$IMAGE3:$BRANCH-$GITHUB_SHA" ./part3/log-output/$IMAGE3
+
+      - name: Publish images
+        run: |
+          docker push "gcr.io/$PROJECT_ID/$IMAGE1:$BRANCH-$GITHUB_SHA"
+          docker push "gcr.io/$PROJECT_ID/$IMAGE2:$BRANCH-$GITHUB_SHA"
+          docker push "gcr.io/$PROJECT_ID/$IMAGE3:$BRANCH-$GITHUB_SHA"
+
+      - name: Set up Kustomize 
+        uses: imranismail/setup-kustomize@v2.1.0
+
+      - name: Install SOPS
+        run: |
+          curl -LO https://github.com/getsops/sops/releases/download/v3.9.3/sops-v3.9.3.linux.amd64
+          mv sops-v3.9.3.linux.amd64 /usr/local/bin/sops
+          chmod +x /usr/local/bin/sops
+
+      - name: Decrypt secrets
+        run: |
+          mkdir -p ~/.config/sops/age
+          echo "${{ secrets.SOPS_AGE_KEY_FILE }}" > ~/.config/sops/age/keys.txt
+          export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
+          sops --decrypt part3/log-output/manifests/secret.enc.yaml > part3/log-output/base/secret.yaml
+
+      - name: Deploy
+        run: |-
+          cd part3/project/
+          if [ "${GITHUB_REF#refs/heads/}" = "main" ]; then
+            NAMESPACE="log-output"
+          else
+            NAMESPACE="${GITHUB_REF#refs/heads/}"
+          fi
+          kubectl create namespace $NAMESPACE || true
+          kubectl config set-context --current --namespace=$NAMESPACE
+          kustomize edit add configmap namespace-config --from-literal=NAMESPACE=$NAMESPACE
+          kustomize edit set namespace $NAMESPACE
+          kustomize edit set image PINGPONG/IMAGE=gcr.io/$PROJECT_ID/$IMAGE1:$BRANCH-$GITHUB_SHA
+          kustomize edit set image TIMESTAMPGENERATOR/IMAGE=gcr.io/$PROJECT_ID/$IMAGE2:$BRANCH-$GITHUB_SHA
+          kustomize edit set image TIMESTAMPOUTPUT/IMAGE=gcr.io/$PROJECT_ID/$IMAGE3:$BRANCH-$GITHUB_SHA
+          kustomize build . | kubectl apply -f -
+          kubectl rollout status deployment $SERVICE1
+          kubectl rollout status deployment $SERVICE2
+          kubectl get services -o wide
