@@ -80,7 +80,7 @@ jobs:
 
       - name: Deploy
         run: |-
-          cd part3/project/
+          cd part3/log-output/base/
           if [ "${GITHUB_REF#refs/heads/}" = "main" ]; then
             NAMESPACE="log-output"
           else
