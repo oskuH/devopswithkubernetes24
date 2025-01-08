@@ -19,6 +19,10 @@ spec:
       containers:
         - name: todo-backend
           image: TODOBACKEND/IMAGE
+          resources:
+            limits:
+              cpu: "10m"
+              memory: "100Mi"
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:

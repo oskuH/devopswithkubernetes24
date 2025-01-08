@@ -26,5 +26,8 @@ spec:
                     name: postgres-password
                     key: POSTGRES_PASSWORD
               - name: NAMESPACE
-                value: $(NAMESPACE)
+                valueFrom:
+                  configMapKeyRef:
+                    name: namespace-config
+                    key: NAMESPACE
           restartPolicy: OnFailure

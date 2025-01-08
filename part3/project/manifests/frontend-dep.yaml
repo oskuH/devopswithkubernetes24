@@ -22,11 +22,19 @@ spec:
           volumeMounts:
           - name: shared-image
             mountPath: /usr/src/app/image
+          resources:
+            limits:
+              cpu: "10m"
+              memory: "50Mi"
         - name: project-output
           image: PROJECTOUTPUT/IMAGE
           volumeMounts:
           - name: shared-image
             mountPath: /usr/src/app/image
+          resources:
+            limits:
+              cpu: "10m"
+              memory: "100Mi"
   strategy:
     type: RollingUpdate
     rollingUpdate:
