@@ -1,4 +1,4 @@
-name: Release log-output
+name: Release log-output.
 
 on:
   push:
