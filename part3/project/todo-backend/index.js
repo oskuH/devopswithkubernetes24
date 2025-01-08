@@ -3,15 +3,17 @@ const path = require('path');
 const cors = require('cors');
 const app = express();
 const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD;
+const NAMESPACE = process.env.NAMESPACE;
 
 if (!POSTGRES_PASSWORD) throw new Error('No value for POSTGRES_PASSWORD environment variable');
+if (!NAMESPACE) throw new Error('No value for NAMESPACE environment variable');
 
 const { Client } = require('pg');
 
 const client = new Client({
   user: 'postgres',
   password: POSTGRES_PASSWORD,
-  host: 'postgres-svc.$NAMESPACE.svc.cluster.local',
+  host: `postgres-svc.${NAMESPACE}.svc.cluster.local`,
   port: 5432,
   database: 'postgres'
 });
@@ -45,9 +47,7 @@ app.use(cors());
 app.use(express.json());
 
 const getTodos = async () => {
-  console.log('getTodos activated');
   const res = await client.query('SELECT todo FROM todos');
-  console.log('postgres accessed');
   return res.rows.map(row => row.todo);
 };
 
