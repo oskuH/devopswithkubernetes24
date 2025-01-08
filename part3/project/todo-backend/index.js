@@ -45,7 +45,9 @@ app.use(cors());
 app.use(express.json());
 
 const getTodos = async () => {
+  console.log('getTodos activated');
   const res = await client.query('SELECT todo FROM todos');
+  console.log('postgres accessed');
   return res.rows.map(row => row.todo);
 };
 
