@@ -76,7 +76,7 @@ jobs:
           mkdir -p ~/.config/sops/age
           echo "${{ secrets.SOPS_AGE_KEY_FILE }}" > ~/.config/sops/age/keys.txt
           export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
-          sops --decrypt part3/log-output/manifests/secret.enc.yaml > part3/log-output/base/secret.yaml
+          sops --decrypt part3/log-output/base/secret.enc.yaml > part3/log-output/base/secret.yaml
 
       - name: Deploy
         run: |-
