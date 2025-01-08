@@ -31,9 +31,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Set namespace for subsequent files
-        run: echo "NAMESPACE=${{ github.ref_name }}" >> $GITHUB_ENV
-      
       - uses: google-github-actions/auth@v2
         with:
           credentials_json: '${{ secrets.GKE_SA_KEY }}'
@@ -91,6 +88,7 @@ jobs:
           fi
           kubectl create namespace $NAMESPACE || true
           kubectl config set-context --current --namespace=$NAMESPACE
+          kustomize edit add configmap namespace-config --from-literal=NAMESPACE=$NAMESPACE
           kustomize edit set namespace $NAMESPACE
           kustomize edit set image IMAGEFINDER/IMAGE=gcr.io/$PROJECT_ID/$IMAGE1:$BRANCH-$GITHUB_SHA
           kustomize edit set image PROJECTOUTPUT/IMAGE=gcr.io/$PROJECT_ID/$IMAGE2:$BRANCH-$GITHUB_SHA
