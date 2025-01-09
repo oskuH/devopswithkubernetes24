@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: exercises
+  name: log-output-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-output
+  template:
+    metadata:
+      labels:
+        app: log-output
+    spec:
+      volumes:
+        - name: shared-timestamp
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: log-output-configmap
+            items:
+            - key: information.txt
+              path: information.txt
+      containers:
+        - name: timestamp-generator
+          image: oskuh/timestamp-generator-app:2.0
+          volumeMounts:
+          - name: shared-timestamp
+            mountPath: /usr/src/app/timestamp
+        - name: timestamp-output
+          image: oskuh/timestamp-output-app:2.0
+          env:
+          - name: MESSAGE
+            valueFrom:
+              configMapKeyRef:
+                name: log-output-configmap
+                key: message
+          volumeMounts:
+          - name: shared-timestamp
+            mountPath: /usr/src/app/timestamp
+          - name: config
+            mountPath: /config
+            readOnly: true

@@ -24,11 +24,19 @@ spec:
       containers:
         - name: timestamp-generator
           image: TIMESTAMPGENERATOR/IMAGE
+          resources:
+            limits:
+              cpu: "10m"
+              memory: "50Mi"
           volumeMounts:
           - name: shared-timestamp
             mountPath: /usr/src/app/timestamp
         - name: timestamp-output
           image: TIMESTAMPOUTPUT/IMAGE
+          resources:
+            limits:
+              cpu: "10m"
+              memory: "100m"
           env:
           - name: MESSAGE
             valueFrom:

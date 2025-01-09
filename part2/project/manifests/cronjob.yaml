@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: random-wikipedia
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: random-wikipedia
+            image: postgres
+            imagePullPolicy: IfNotPresent
+            command:
+              - /bin/sh
+              - -c
+              - |
+                apt-get update && apt-get install -y curl
+                RANDOM_URL=$(curl -s -I https://en.wikipedia.org/wiki/Special:Random | grep -i location | awk '{print $2}' | tr -d '\r')
+                PGPASSWORD=$POSTGRES_PASSWORD psql -h postgres-svc.project.svc.cluster.local -U postgres -d postgres -c "INSERT INTO todos (todo) VALUES ('Read $RANDOM_URL');"
+            env:
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres-password
+                    key: POSTGRES_PASSWORD
+          restartPolicy: OnFailure

@@ -19,22 +19,22 @@ spec:
       containers:
         - name: image-finder
           image: IMAGEFINDER/IMAGE
-          volumeMounts:
-          - name: shared-image
-            mountPath: /usr/src/app/image
           resources:
             limits:
               cpu: "20m"
               memory: "50Mi"
-        - name: project-output
-          image: PROJECTOUTPUT/IMAGE
           volumeMounts:
           - name: shared-image
             mountPath: /usr/src/app/image
+        - name: project-output
+          image: PROJECTOUTPUT/IMAGE
           resources:
             limits:
               cpu: "20m"
               memory: "100Mi"
+          volumeMounts:
+          - name: shared-image
+            mountPath: /usr/src/app/image
   strategy:
     type: RollingUpdate
     rollingUpdate:
