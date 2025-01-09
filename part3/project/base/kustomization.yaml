@@ -9,7 +9,6 @@ resources:
   - todo-backend-svc.yaml
   - ingress.yaml
   - cronjob.yaml
-  - ../persistentvolumes/persistentvolumeclaim.yaml
   
 images:
   - name: IMAGEFINDER/IMAGE

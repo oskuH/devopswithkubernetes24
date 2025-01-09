@@ -3,6 +3,8 @@ kind: Kustomization
 namespace: local-project
 resources:
   - ../../base
+  - persistentvolume.yaml
+  - persistentvolumeclaim.yaml
 patches:
   - path: frontend-svc-patch.yaml
   - path: todo-backend-svc-patch.yaml
