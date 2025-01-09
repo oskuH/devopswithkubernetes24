@@ -80,7 +80,7 @@ jobs:
 
       - name: Deploy
         run: |-
-          cd part3/project/base/
+          cd part3/project/overlays/gke/
           if [ "${GITHUB_REF#refs/heads/}" = "main" ]; then
             NAMESPACE="default"
           else
