@@ -7,7 +7,7 @@ on:
       - 'part3/project/project-output/**'
       - 'part3/project/todo-backend/**'
       - 'part3/project/image-finder/**'
-      - 'part3/project/manifests/**'
+      - 'part3/project/base/**'
       - 'part3/project/persistentvolumes/**'
 
 env:
@@ -76,11 +76,11 @@ jobs:
           mkdir -p ~/.config/sops/age
           echo "${{ secrets.SOPS_AGE_KEY_FILE }}" > ~/.config/sops/age/keys.txt
           export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
-          sops --decrypt part3/project/manifests/secret.enc.yaml > part3/project/manifests/secret.yaml
+          sops --decrypt part3/project/base/secret.enc.yaml > part3/project/base/secret.yaml
 
       - name: Deploy
         run: |-
-          cd part3/project/
+          cd part3/project/base/
           if [ "${GITHUB_REF#refs/heads/}" = "main" ]; then
             NAMESPACE="default"
           else

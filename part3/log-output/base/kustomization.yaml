@@ -12,8 +12,8 @@ resources:
   
 images:
   - name: PINGPONG/IMAGE
-    newName: oskuh/ping-pong-app:latest
+    newName: oskuh/ping-pong-app:3.0
   - name: TIMESTAMPGENERATOR/IMAGE
-    newName: oskuh/timestamp-generator-app:latest
+    newName: oskuh/timestamp-generator-app:3.0
   - name: TIMESTAMPOUTPUT/IMAGE
-    newName: oskuh/timestamp-output-app:latest
+    newName: oskuh/timestamp-output-app:3.0

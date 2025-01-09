@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - postgres.yaml
+  - secret.yaml
+  - frontend-dep.yaml
+  - todo-backend-dep.yaml
+  - frontend-svc.yaml
+  - todo-backend-svc.yaml
+  - ingress.yaml
+  - cronjob.yaml
+  - ../persistentvolumes/persistentvolumeclaim.yaml
+  
+images:
+  - name: IMAGEFINDER/IMAGE
+    newName: oskuh/image-finder-app:3.0
+  - name: PROJECTOUTPUT/IMAGE
+    newName: oskuh/project-output-app:3.0
+  - name: TODOBACKEND/IMAGE
+    newName: oskuh/todo-backend-app:3.0

@@ -24,7 +24,7 @@ spec:
             mountPath: /usr/src/app/image
           resources:
             limits:
-              cpu: "10m"
+              cpu: "20m"
               memory: "50Mi"
         - name: project-output
           image: PROJECTOUTPUT/IMAGE
@@ -33,7 +33,7 @@ spec:
             mountPath: /usr/src/app/image
           resources:
             limits:
-              cpu: "10m"
+              cpu: "20m"
               memory: "100Mi"
   strategy:
     type: RollingUpdate

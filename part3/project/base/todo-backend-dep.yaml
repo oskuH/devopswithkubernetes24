@@ -27,7 +27,7 @@ spec:
           image: TODOBACKEND/IMAGE
           resources:
             limits:
-              cpu: "10m"
+              cpu: "20m"
               memory: "100Mi"
           env:
             - name: POSTGRES_PASSWORD
